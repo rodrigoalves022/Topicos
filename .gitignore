@@ -1,0 +1,8 @@
+# Backups e lixo
+analise_gap_win_backup.ipynb
+*.rar
+__pycache__/
+*.pyc
+
+# Pasta de saída
+outputs_gap_win/
