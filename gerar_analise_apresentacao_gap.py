@@ -428,11 +428,21 @@ def main():
         .reset_index()
     )
 
-    tabela_alta.to_csv(pasta_saida / "tabela_gap_alta_apresentacao.csv", index=False)
-    tabela_baixa.to_csv(pasta_saida / "tabela_gap_baixa_apresentacao.csv", index=False)
-    tabela_fechada.to_csv(pasta_saida / "tabela_unica_gap_apresentacao.csv", index=False)
-    overshoot.to_csv(pasta_saida / "tabela_overshoot_sem_gap.csv", index=False)
-    estat.to_csv(pasta_saida / "estatisticas_gap_direcao_apresentacao.csv", index=False)
+    def preparar_tabela_apresentacao(df):
+        # Mantém os cálculos originais e apenas troca NaN por "-" na saída final.
+        return df.copy().where(pd.notna(df), "-")
+
+    tabela_alta_apresentacao = preparar_tabela_apresentacao(tabela_alta)
+    tabela_baixa_apresentacao = preparar_tabela_apresentacao(tabela_baixa)
+    tabela_fechada_apresentacao = preparar_tabela_apresentacao(tabela_fechada)
+    overshoot_apresentacao = preparar_tabela_apresentacao(overshoot)
+    estat_apresentacao = preparar_tabela_apresentacao(estat)
+
+    tabela_alta_apresentacao.to_csv(pasta_saida / "tabela_gap_alta_apresentacao.csv", index=False, encoding="utf-8-sig")
+    tabela_baixa_apresentacao.to_csv(pasta_saida / "tabela_gap_baixa_apresentacao.csv", index=False, encoding="utf-8-sig")
+    tabela_fechada_apresentacao.to_csv(pasta_saida / "tabela_unica_gap_apresentacao.csv", index=False, encoding="utf-8-sig")
+    overshoot_apresentacao.to_csv(pasta_saida / "tabela_overshoot_sem_gap.csv", index=False, encoding="utf-8-sig")
+    estat_apresentacao.to_csv(pasta_saida / "estatisticas_gap_direcao_apresentacao.csv", index=False, encoding="utf-8-sig")
 
     if args.dias:
         dias_plot = [pd.to_datetime(d) for d in args.dias]
